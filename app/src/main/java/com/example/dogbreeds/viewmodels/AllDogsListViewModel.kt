@@ -13,6 +13,7 @@ class AllDogsListViewModel(breedSelectionChangedListener: AllDogsFragment.BreedS
     @Inject
     lateinit var dogApi: DogService
 
+
     var allDogsList: MutableList<SingleDog>? = null
     var allDogsAdapter: AllDogsAdapter = AllDogsAdapter(breedSelectionChangedListener)
 
@@ -25,7 +26,7 @@ class AllDogsListViewModel(breedSelectionChangedListener: AllDogsFragment.BreedS
     }
 
     private fun display(dogResponse: DogResponse?) {
-        allDogsList = mutableListOf<SingleDog>()
+        allDogsList = mutableListOf()
         dogResponse?.message?.forEach {
             allDogsList!!.add(SingleDog(it.key, it.value, dogApi.getRandomImageFromBreed(it.key).execute().body()?.message!!))
         }

@@ -4,11 +4,13 @@ import androidx.lifecycle.ViewModel
 import com.example.dogbreeds.injection.component.DaggerViewModelInjector
 import com.example.dogbreeds.injection.module.NetworkModule
 import com.example.dogbreeds.injection.component.ViewModelInjector
+import com.example.dogbreeds.injection.module.DataModule
 
 abstract class BaseViewModel: ViewModel(){
     private val injector: ViewModelInjector = DaggerViewModelInjector
         .builder()
         .networkModule(NetworkModule)
+        .dataModule(DataModule)
         .build()
 
     init {

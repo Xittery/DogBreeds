@@ -1,17 +1,20 @@
 package com.example.dogbreeds.injection.component
 
+import com.example.dogbreeds.injection.module.DataModule
 import com.example.dogbreeds.injection.module.NetworkModule
 import com.example.dogbreeds.viewmodels.AllDogsListViewModel
 import com.example.dogbreeds.viewmodels.DetailListViewModel
 import com.example.dogbreeds.viewmodels.FavoriteDogsListViewModel
-import com.example.dogbreeds.viewmodels.SingleDogViewModel
 import dagger.Component
 
 import javax.inject.Singleton
 
 
 @Singleton
-@Component(modules = [(NetworkModule::class)])
+@Component(modules = [
+    (NetworkModule::class),
+    (DataModule::class)
+    ])
 interface ViewModelInjector {
 
     fun inject(allDogsListViewModel: AllDogsListViewModel)
@@ -23,5 +26,6 @@ interface ViewModelInjector {
         fun build(): ViewModelInjector
 
         fun networkModule(networkModule: NetworkModule): Builder
+        fun dataModule(dataModule: DataModule): Builder
     }
 }
