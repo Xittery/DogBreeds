@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">DogBreeds</string>
+    <string name="all_dogs_tab_title">All dogs</string>
+    <string name="favourite_dogs_tab_title">Favourite dogs</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+</resources>
