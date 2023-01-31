@@ -2,7 +2,5 @@
 <project version="4">
   <component name="VcsDirectoryMappings">
     <mapping directory="$PROJECT_DIR$" vcs="Git" />
-    <mapping directory="$PROJECT_DIR$/Decipher/HiddenRaves" vcs="Git" />
-    <mapping directory="$PROJECT_DIR$/Netflix and shuffle/RandomNetflix" vcs="Git" />
   </component>
 </project>
