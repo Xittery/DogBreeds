@@ -4,7 +4,7 @@
     <data>
         <variable
             name="viewModel"
-            type="com.example.dogbreeds.viewmodels.AllDogsListViewModel" />
+            type="com.frostdev.dogbreeds.viewmodels.AllDogsListViewModel" />
     </data>
     <RelativeLayout
         android:id="@+id/alldogs_root"

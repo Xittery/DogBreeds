@@ -4,7 +4,7 @@
     <data>
         <variable
             name="viewModel"
-            type="com.example.dogbreeds.viewmodels.FavoriteDogsListViewModel" />
+            type="com.frostdev.dogbreeds.viewmodels.FavoriteDogsListViewModel" />
     </data>
     <RelativeLayout
         android:id="@+id/favoritedogs_root"
@@ -12,6 +12,12 @@
         android:focusableInTouchMode="true"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
+
+        <TextView
+            android:text="læsad"
+            android:gravity="center"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/favoritedogs_recycler"
