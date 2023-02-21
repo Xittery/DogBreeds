@@ -7,6 +7,8 @@ import com.frostdev.dogbreeds.R
 import com.frostdev.dogbreeds.databinding.ActivityDetailBinding
 import com.frostdev.dogbreeds.helpers.PersistentSettings
 import com.frostdev.dogbreeds.viewmodels.DetailListViewModel
+import kotlinx.android.synthetic.main.activity_detail.*
+import java.util.*
 import javax.inject.Inject
 
 class DetailActivity : AppCompatActivity() {
@@ -41,5 +43,10 @@ class DetailActivity : AppCompatActivity() {
         val viewModel = DetailListViewModel(detailSelectionListener, mBreed, mSubBreeds)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_detail)
         binding.viewModel = viewModel
+        setBreed()
+    }
+
+    fun setBreed() {
+        detail_title.text = mBreed.replaceFirstChar { if (it.isLowerCase()) it.titlecase(Locale.getDefault()) else it.toString() }
     }
 }

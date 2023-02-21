@@ -13,6 +13,15 @@
         android:orientation="vertical"
         tools:context=".activities.DetailActivity">
 
+        <TextView
+            android:id="@+id/detail_title"
+            android:gravity="center"
+            android:textSize="20sp"
+            android:layout_margin="5dp"
+            android:textColor="@color/colorPurpleFull"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/detail_recycler"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"

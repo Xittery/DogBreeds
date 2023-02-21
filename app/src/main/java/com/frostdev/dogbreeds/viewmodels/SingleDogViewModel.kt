@@ -14,7 +14,7 @@ import java.net.URL
 class SingleDogViewModel: BaseViewModel() {
 
     private val breed = MutableLiveData<String>()
-    private val image = MutableLiveData<String>()
+    private val image = MutableLiveData<String?>()
 
     fun bind(singleDog: SingleDog){
         breed.value = singleDog.breed

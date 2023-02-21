@@ -19,8 +19,8 @@ class DetailAdapter(detailSelectionListener: DetailActivity.DetailSelectionListe
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): DetailViewHolder {
         val binding: CellDetailBinding = DataBindingUtil.inflate(LayoutInflater.from(parent.context), R.layout.cell_detail, parent, false)
-        return DetailViewHolder(binding).listen { position, type ->
-            this.mDetailSelectionListener.onImageSelected(detailDogList[position].image)
+        return DetailViewHolder(binding).listen { position, _ ->
+            detailDogList[position].image?.let { this.mDetailSelectionListener.onImageSelected(it) }
         }
     }
 

@@ -21,4 +21,8 @@ class MainViewPagerAdapter(fm: FragmentManager) : FragmentStatePagerAdapter(fm) 
     override fun getItem(position: Int): Fragment {
         return fragmentList[position]
     }
+
+    override fun getPageTitle(position: Int): CharSequence {
+        return titleList[position]
+    }
 }
