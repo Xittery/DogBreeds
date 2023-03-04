@@ -69,6 +69,13 @@ dependencies {
     androidTestImplementation 'androidx.test.ext:junit:1.1.5'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
 
+    def lifecycle_ver = "2.2.0-rc02"
+    implementation "androidx.lifecycle:lifecycle-runtime-ktx:$lifecycle_ver"
+    implementation "androidx.lifecycle:lifecycle-extensions:$lifecycle_ver"
+    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycle_ver"
+
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.4")
+
     implementation "androidx.fragment:fragment-ktx:1.5.5"
 
     implementation "com.google.dagger:dagger:2.44.2"

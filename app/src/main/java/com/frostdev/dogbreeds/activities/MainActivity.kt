@@ -1,8 +1,6 @@
 package com.frostdev.dogbreeds.activities
 
 import android.os.Bundle
-import android.os.StrictMode
-import android.os.StrictMode.ThreadPolicy
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import com.frostdev.dogbreeds.R
@@ -17,7 +15,7 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        StrictMode.setThreadPolicy(ThreadPolicy.Builder().permitAll().build())
+        setTheme(R.style.Theme_DogBreeds)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
         setupViewPager()
     }

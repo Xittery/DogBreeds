@@ -1,35 +1,50 @@
 package com.frostdev.dogbreeds.viewmodels
 
-import com.frostdev.dogbreeds.adapters.AllDogsAdapter
-import com.frostdev.dogbreeds.fragments.AllDogsFragment
+import android.content.res.Resources
+import android.graphics.BitmapFactory
+import android.graphics.drawable.BitmapDrawable
+import android.graphics.drawable.Drawable
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.viewModelScope
 import com.frostdev.dogbreeds.interfaces.DogService
 import com.frostdev.dogbreeds.model.DogResponse
 import com.frostdev.dogbreeds.model.SingleDog
+import kotlinx.coroutines.*
+import java.io.IOException
+import java.net.HttpURLConnection
+import java.net.URL
 import javax.inject.Inject
 
-
-class AllDogsListViewModel(breedSelectionChangedListener: AllDogsFragment.BreedSelectionListener): BaseViewModel() {
+class AllDogsListViewModel: BaseViewModel() {
 
     @Inject
     lateinit var dogApi: DogService
 
+    var allDogsList: MutableLiveData<MutableList<SingleDog>> = MutableLiveData()
 
-    var allDogsList: MutableList<SingleDog>? = null
-    var allDogsAdapter: AllDogsAdapter = AllDogsAdapter(breedSelectionChangedListener)
-
-    init{
-        loadBreeds()
-    }
-
-    private fun loadBreeds() {
-        display(dogApi.getDogs().execute().body())
-    }
-
-    private fun display(dogResponse: DogResponse?) {
-        allDogsList = mutableListOf()
-        dogResponse?.message?.forEach {
-            allDogsList!!.add(SingleDog(it.key, it.value, dogApi.getRandomImageFromBreed(it.key).execute().body()?.message))
+    fun loadBreeds() {
+        viewModelScope.launch {
+            var dogs: MutableList<SingleDog>
+            withContext(Dispatchers.IO) {
+                dogs = collectDogs(dogApi.getDogs().execute().body())
+            }
+            allDogsList.postValue(dogs)
         }
-        allDogsAdapter.updateSingleDogList(allDogsList!!)
+    }
+
+    fun collectDogs(dogResponse: DogResponse?): MutableList<SingleDog> {
+        val allDogsLists = mutableListOf<SingleDog>()
+        dogResponse?.message?.forEach {
+            val image: Drawable = drawableFromUrl(dogApi.getRandomImageFromBreed(it.key).execute().body()?.message)
+            allDogsLists.add(SingleDog(it.key, it.value, image))
+        }
+        return allDogsLists
+    }
+
+    @Throws(IOException::class)
+    fun drawableFromUrl(url: String?): Drawable {
+        val connection: HttpURLConnection = URL(url).openConnection() as HttpURLConnection
+        connection.connect()
+        return BitmapDrawable(Resources.getSystem(), BitmapFactory.decodeStream(connection.inputStream))
     }
 }

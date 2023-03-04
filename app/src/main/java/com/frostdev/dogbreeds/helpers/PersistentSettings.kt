@@ -2,6 +2,8 @@ package com.frostdev.dogbreeds.helpers
 
 import android.content.Context
 import android.content.SharedPreferences
+import com.frostdev.dogbreeds.model.SingleDog
+import io.reactivex.Single
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -17,12 +19,12 @@ class PersistentSettings @Inject constructor(context: Context) {
     }
 
 
-    fun getSettingStringSet(setting: String?, defValues: Set<String?>?): Set<String>? {
-        return settings.getStringSet(setting, defValues)
+    fun getFavouriteDogsSet(setting: String?, defValues: Set<SingleDog>): Set<SingleDog>? {
+        //return settings.getStringSet(setting, defValues)
+        return null
     }
 
-    fun setSettingStringSet(setting: String?, defValues: Set<String?>?): Set<String>? {
-        //return settings.edit().putStringSet()
+    fun setFavouriteDogsSet(setting: String?, defValues: Set<String?>?): Set<String>? {
         return null
     }
 

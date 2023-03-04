@@ -8,6 +8,8 @@ import dagger.Provides
 @Module
 object DataModule {
 
+    val ACTIVE_FAVORITES = "activeFavorites"
+
     @Provides
     fun providePersistentSettings(context: Context): PersistentSettings {
         return PersistentSettings(context)

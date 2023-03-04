@@ -5,6 +5,9 @@
         <variable
             name="viewModel"
             type="com.frostdev.dogbreeds.viewmodels.DetailListViewModel" />
+        <variable
+            name="activity"
+            type="com.frostdev.dogbreeds.activities.DetailActivity" />
     </data>
     <androidx.appcompat.widget.LinearLayoutCompat
         xmlns:tools="http://schemas.android.com/tools"
@@ -18,16 +21,24 @@
             android:gravity="center"
             android:textSize="20sp"
             android:layout_margin="5dp"
-            android:textColor="@color/colorPurpleFull"
+            android:textColor="@color/colorAccent"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"/>
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/detail_recycler"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-            app:adapter="@{viewModel.detailAdapter}"
+            app:adapter="@{activity.detailAdapter}"
             android:layout_width="match_parent"
             android:layout_height="match_parent"/>
+
+        <ProgressBar
+            android:id="@+id/progress_loader_detail"
+            style="?android:attr/progressBarStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:visibility="visible" />
 
     </androidx.appcompat.widget.LinearLayoutCompat>
 </layout>

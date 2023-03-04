@@ -1,35 +1,59 @@
 package com.frostdev.dogbreeds.viewmodels
 
+import android.content.res.Resources
+import android.graphics.BitmapFactory
+import android.graphics.drawable.BitmapDrawable
+import android.graphics.drawable.Drawable
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.viewModelScope
 import com.frostdev.dogbreeds.activities.DetailActivity
 import com.frostdev.dogbreeds.adapters.DetailAdapter
 import com.frostdev.dogbreeds.interfaces.DogService
 import com.frostdev.dogbreeds.model.AllImagesResponse
 import com.frostdev.dogbreeds.model.SingleDog
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import java.io.IOException
+import java.net.HttpURLConnection
+import java.net.URL
 import javax.inject.Inject
 
-class DetailListViewModel(detailSelectionChangedListener: DetailActivity.DetailSelectionListener, breed: String, subBreeds: List<String>?): BaseViewModel() {
+class DetailListViewModel(breed: String, subBreeds: List<String>?): BaseViewModel() {
 
     @Inject
     lateinit var dogApi: DogService
 
-    var detailList: MutableList<SingleDog>? = null
-    var detailAdapter: DetailAdapter = DetailAdapter(detailSelectionChangedListener)
-    var mBreed: String = breed
-    var msubBreedList: List<String>? = subBreeds
+    var detailList: MutableLiveData<MutableList<SingleDog>> = MutableLiveData()
+    private var mBreed: String = breed
+    private var msubBreedList: List<String>? = subBreeds
 
     init{
         loadImages()
     }
 
     private fun loadImages() {
-        display(dogApi.getAllImagesFromBreed(mBreed).execute().body())
+        viewModelScope.launch {
+            var dogs: MutableList<SingleDog>
+            withContext(Dispatchers.IO) {
+                dogs = collectDogs(dogApi.getAllImagesFromBreed(mBreed).execute().body())
+            }
+            detailList.postValue(dogs)
+        }
     }
 
-    private fun display(imageResponse: AllImagesResponse?) {
-        detailList = mutableListOf<SingleDog>()
+    private fun collectDogs(imageResponse: AllImagesResponse?): MutableList<SingleDog> {
+        val allDogsLists = mutableListOf<SingleDog>()
         imageResponse?.message?.forEach {
-            detailList!!.add(SingleDog(mBreed, msubBreedList, it))
+            allDogsLists.add(SingleDog(mBreed, msubBreedList, drawableFromUrl(it)))
         }
-        detailAdapter.updateImageList(detailList!!)
+        return allDogsLists
+    }
+
+    @Throws(IOException::class)
+    fun drawableFromUrl(url: String?): Drawable {
+        val connection: HttpURLConnection = URL(url).openConnection() as HttpURLConnection
+        connection.connect()
+        return BitmapDrawable(Resources.getSystem(), BitmapFactory.decodeStream(connection.inputStream))
     }
 }

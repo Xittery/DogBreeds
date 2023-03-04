@@ -5,7 +5,11 @@ import android.graphics.BitmapFactory
 import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.Drawable
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.viewModelScope
 import com.frostdev.dogbreeds.model.SingleDog
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.io.IOException
 import java.net.HttpURLConnection
 import java.net.URL
@@ -14,7 +18,7 @@ import java.net.URL
 class SingleDogViewModel: BaseViewModel() {
 
     private val breed = MutableLiveData<String>()
-    private val image = MutableLiveData<String?>()
+    private val image = MutableLiveData<Drawable>()
 
     fun bind(singleDog: SingleDog){
         breed.value = singleDog.breed
@@ -25,16 +29,7 @@ class SingleDogViewModel: BaseViewModel() {
         return breed
     }
 
-    fun getImage(): Drawable? {
-        return drawableFromUrl(image.value)
+    fun getImage(): MutableLiveData<Drawable> {
+        return image
     }
-
-    @Throws(IOException::class)
-    fun drawableFromUrl(url: String?): Drawable? {
-        val connection: HttpURLConnection = URL(url).openConnection() as HttpURLConnection
-        connection.connect()
-        val x = BitmapFactory.decodeStream(connection.inputStream)
-        return BitmapDrawable(Resources.getSystem(), x)
-    }
-
 }

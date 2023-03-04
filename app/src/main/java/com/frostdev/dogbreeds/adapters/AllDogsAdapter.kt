@@ -1,6 +1,5 @@
 package com.frostdev.dogbreeds.adapters
 
-import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
@@ -20,7 +19,7 @@ class AllDogsAdapter(breedSelectionListener: AllDogsFragment.BreedSelectionListe
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SingleDogViewHolder {
         val binding: CellSingleDogBinding = DataBindingUtil.inflate(LayoutInflater.from(parent.context), R.layout.cell_single_dog, parent, false)
-        return SingleDogViewHolder(binding).listen { position, type ->
+        return SingleDogViewHolder(binding).listen { position, _ ->
             this.mBreedSelectionListener.onBreedSelected(singleDogList[position].breed, singleDogList[position].subBreeds as ArrayList<String>)
         }
     }
@@ -42,17 +41,16 @@ class AllDogsAdapter(breedSelectionListener: AllDogsFragment.BreedSelectionListe
         return if(::singleDogList.isInitialized) singleDogList.size else 0
     }
 
-    fun <T : RecyclerView.ViewHolder> T.listen(event: (position: Int, type: Int) -> Unit): T {
+    private fun <T : RecyclerView.ViewHolder> T.listen(event: (position: Int, type: Int) -> Unit): T {
         itemView.setOnClickListener {
             event.invoke(adapterPosition, itemViewType)
         }
         return this
     }
 
-    @SuppressLint("NotifyDataSetChanged")
     fun updateSingleDogList(list: List<SingleDog>){
         this.singleDogList = list
-        notifyDataSetChanged()
+        notifyItemRangeChanged(0, itemCount)
     }
 
     class SingleDogViewHolder(private val binding: CellSingleDogBinding) : RecyclerView.ViewHolder(binding.root) {

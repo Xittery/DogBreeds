@@ -33,7 +33,7 @@
                 app:tabIndicatorColor="@null"
                 app:tabMode="fixed"
                 app:tabTextColor="@color/colorPurple"
-                app:tabSelectedTextColor="@color/colorPurpleFull" />
+                app:tabSelectedTextColor="@color/colorAccent" />
         </androidx.appcompat.widget.Toolbar>
 
         <androidx.viewpager.widget.ViewPager
