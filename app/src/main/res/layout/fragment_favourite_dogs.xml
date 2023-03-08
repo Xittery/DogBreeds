@@ -5,6 +5,9 @@
         <variable
             name="viewModel"
             type="com.frostdev.dogbreeds.viewmodels.FavoriteDogsListViewModel" />
+        <variable
+            name="fragment"
+            type="com.frostdev.dogbreeds.fragments.FavouriteDogsFragment" />
     </data>
     <RelativeLayout
         android:id="@+id/favoritedogs_root"
@@ -14,19 +17,24 @@
         android:layout_height="match_parent">
 
         <TextView
-            android:text="læsad"
-            android:gravity="center"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"/>
+            android:id="@+id/nofavs"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:textColor="@color/colorAccent"
+            android:textSize="20sp"
+            android:textStyle="italic"
+            android:text="You still didn't select any favourites"/>
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/favoritedogs_recycler"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            android:adapter="@{fragment.getRecyclerAdapter()}"
             android:layout_width="match_parent"
             android:layout_height="match_parent"/>
 
         <ProgressBar
-            android:id="@+id/progress_loader"
+            android:id="@+id/fav_progress_loader"
             style="?android:attr/progressBarStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

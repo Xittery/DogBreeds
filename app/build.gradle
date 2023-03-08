@@ -39,7 +39,7 @@ dependencies {
 
     // LiveData & ViewModel
     implementation"android.arch.lifecycle:extensions:1.1.1"
-    implementation 'androidx.databinding:databinding-runtime:7.3.1'
+    implementation 'androidx.databinding:databinding-runtime:7.4.2'
 
     //Dagger
     def dagger = "2.44.2"
@@ -73,6 +73,8 @@ dependencies {
     implementation "androidx.lifecycle:lifecycle-runtime-ktx:$lifecycle_ver"
     implementation "androidx.lifecycle:lifecycle-extensions:$lifecycle_ver"
     implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycle_ver"
+
+    implementation 'com.google.code.gson:gson:2.10'
 
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.4")
 

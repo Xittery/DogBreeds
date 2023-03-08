@@ -9,18 +9,16 @@ import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
 
 @Module
-object NetworkModule {
+class NetworkModule() {
 
     @Provides
     @Reusable
-    @JvmStatic
     internal fun provideDogsApi(retrofit: Retrofit): DogService {
         return retrofit.create(DogService::class.java)
     }
 
     @Provides
     @Reusable
-    @JvmStatic
     internal fun provideRetrofitInterface(): Retrofit {
         return Retrofit.Builder()
             .baseUrl("https://dog.ceo/api/")

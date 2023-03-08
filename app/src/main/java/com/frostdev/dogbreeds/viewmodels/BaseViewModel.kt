@@ -1,15 +1,16 @@
 package com.frostdev.dogbreeds.viewmodels
 
 import androidx.lifecycle.ViewModel
-import com.frostdev.dogbreeds.injection.component.ViewModelInjector
+import com.frostdev.dogbreeds.injection.component.DaggerInjector
+import com.frostdev.dogbreeds.injection.component.Injector
 import com.frostdev.dogbreeds.injection.module.DataModule
 import com.frostdev.dogbreeds.injection.module.NetworkModule
 
 abstract class BaseViewModel: ViewModel(){
-    private val injector: ViewModelInjector = com.frostdev.dogbreeds.injection.component.DaggerViewModelInjector
+    private val injector: Injector = DaggerInjector
         .builder()
-        .networkModule(NetworkModule)
-        .dataModule(DataModule)
+        .networkModule(NetworkModule())
+        .dataModule(DataModule())
         .build()
 
     init {

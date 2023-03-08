@@ -11,7 +11,7 @@ import com.frostdev.dogbreeds.fragments.FavouriteDogsFragment
 
 class MainActivity : AppCompatActivity() {
 
-    private var binding: ActivityMainBinding? = null
+    private lateinit var binding: ActivityMainBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -24,8 +24,8 @@ class MainActivity : AppCompatActivity() {
         val adapter = MainViewPagerAdapter(supportFragmentManager)
         adapter.addFragment(AllDogsFragment(), resources.getString(R.string.all_dogs_tab_title))
         adapter.addFragment(FavouriteDogsFragment(), resources.getString(R.string.favourite_dogs_tab_title))
-        binding?.viewPager?.adapter = adapter
-        binding?.tabLayout?.setupWithViewPager(binding?.viewPager, true)
+        binding.viewPager.adapter = adapter
+        binding.tabLayout.setupWithViewPager(binding.viewPager, true)
     }
 
 }

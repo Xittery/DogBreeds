@@ -35,16 +35,23 @@ class AllDogsListViewModel: BaseViewModel() {
     fun collectDogs(dogResponse: DogResponse?): MutableList<SingleDog> {
         val allDogsLists = mutableListOf<SingleDog>()
         dogResponse?.message?.forEach {
-            val image: Drawable = drawableFromUrl(dogApi.getRandomImageFromBreed(it.key).execute().body()?.message)
-            allDogsLists.add(SingleDog(it.key, it.value, image))
+            val image: Drawable? = drawableFromUrl(dogApi.getRandomImageFromBreed(it.key).execute().body()?.message)
+            allDogsLists.add(SingleDog(it.key, it.value, image, it.key))
         }
         return allDogsLists
     }
 
     @Throws(IOException::class)
-    fun drawableFromUrl(url: String?): Drawable {
+    fun drawableFromUrl(url: String?): Drawable? {
         val connection: HttpURLConnection = URL(url).openConnection() as HttpURLConnection
         connection.connect()
-        return BitmapDrawable(Resources.getSystem(), BitmapFactory.decodeStream(connection.inputStream))
+        return if(connection.responseCode != 404) {
+            BitmapDrawable(
+                Resources.getSystem(),
+                BitmapFactory.decodeStream(connection.inputStream)
+            )
+        } else {
+            null
+        }
     }
 }

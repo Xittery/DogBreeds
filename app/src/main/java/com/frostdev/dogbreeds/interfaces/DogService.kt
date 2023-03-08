@@ -3,19 +3,26 @@ package com.frostdev.dogbreeds.interfaces
 import com.frostdev.dogbreeds.model.AllImagesResponse
 import com.frostdev.dogbreeds.model.DogResponse
 import com.frostdev.dogbreeds.model.ImageRandomDogResponse
+import okhttp3.Response
+import okhttp3.ResponseBody
 import retrofit2.Call
 import retrofit2.http.GET
 import retrofit2.http.Path
+import retrofit2.http.Url
+
 
 interface DogService {
 
-    @GET("breeds/list/all")
+    @GET("https://dog.ceo/api/breeds/list/all")
     fun getDogs() : Call<DogResponse>
 
-    @GET("breed/{breed}/images/random")
+    @GET("https://dog.ceo/api/breed/{breed}/images/random")
     fun getRandomImageFromBreed(@Path("breed") breed: String) : Call<ImageRandomDogResponse>
 
-    @GET("breed/{breed}/images")
+    @GET("https://dog.ceo/api/breed/{breed}/images")
     fun getAllImagesFromBreed(@Path("breed") breed: String) : Call<AllImagesResponse>
+
+    @GET
+    fun getSpecificImage(@Url url: String): Call<ImageRandomDogResponse>
 
 }

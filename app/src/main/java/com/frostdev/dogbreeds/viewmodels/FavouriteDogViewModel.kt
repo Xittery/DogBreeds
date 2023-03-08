@@ -16,18 +16,12 @@ import java.net.URL
 import java.util.*
 
 
-class SingleDogViewModel: BaseViewModel() {
+class FavouriteDogViewModel: BaseViewModel() {
 
-    private val breed = MutableLiveData<String>()
     private val image = MutableLiveData<Drawable?>()
 
-    fun bind(singleDog: SingleDog){
-        breed.value = singleDog.breed.replaceFirstChar { if (it.isLowerCase()) it.titlecase(Locale.getDefault()) else it.toString() }
-        image.value = singleDog.image
-    }
-
-    fun getBreed(): MutableLiveData<String> {
-        return breed
+    fun bind(image: Drawable){
+        this.image.value = image
     }
 
     fun getImage(): MutableLiveData<Drawable?> {

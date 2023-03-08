@@ -7,20 +7,41 @@ import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.RecyclerView
 import com.frostdev.dogbreeds.R
-import com.frostdev.dogbreeds.activities.DetailActivity
 import com.frostdev.dogbreeds.databinding.CellDetailBinding
+import com.frostdev.dogbreeds.helpers.PersistentDogs
+import com.frostdev.dogbreeds.injection.Initialization
+import com.frostdev.dogbreeds.injection.component.DaggerInjector
+import com.frostdev.dogbreeds.injection.component.Injector
+import com.frostdev.dogbreeds.injection.module.DataModule
 import com.frostdev.dogbreeds.model.SingleDog
 import com.frostdev.dogbreeds.viewmodels.SingleDogViewModel
+import javax.inject.Inject
 
-class DetailAdapter(detailSelectionListener: DetailActivity.DetailSelectionListener) : RecyclerView.Adapter<DetailAdapter.DetailViewHolder>() {
+class DetailAdapter() : RecyclerView.Adapter<DetailAdapter.DetailViewHolder>() {
+
+    @Inject
+    lateinit var mPersistentDogs: PersistentDogs
+    private val injector: Injector = DaggerInjector
+        .builder()
+        .dataModule(DataModule())
+        .build()
 
     private lateinit var detailDogList: List<SingleDog>
-    private var mDetailSelectionListener = detailSelectionListener
+    private var favDogList: MutableSet<String>?
+
+    init {
+        injector.inject(this)
+        favDogList = mPersistentDogs.getFavouriteDogsSet()
+    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): DetailViewHolder {
         val binding: CellDetailBinding = DataBindingUtil.inflate(LayoutInflater.from(parent.context), R.layout.cell_detail, parent, false)
         return DetailViewHolder(binding).listen { position, _ ->
-            detailDogList[position].image?.let { this.mDetailSelectionListener.onImageSelected(it) }
+            mPersistentDogs.addToFavouriteDogsSet(detailDogList[position].imageUrl)
+            //https://images.dog.ceo/breeds/akita/Japaneseakita.jpg
+            favDogList = mPersistentDogs.getFavouriteDogsSet()
+            println(favDogList)
+            notifyItemChanged(position)
         }
     }
 
@@ -30,7 +51,7 @@ class DetailAdapter(detailSelectionListener: DetailActivity.DetailSelectionListe
     }
 
     override fun onBindViewHolder(holder: DetailViewHolder, position: Int) {
-        holder.bindItems(detailDogList[position])
+        holder.bindItems(detailDogList[position], favDogList)
     }
 
     override fun getItemId(p0: Int): Long {
@@ -57,9 +78,14 @@ class DetailAdapter(detailSelectionListener: DetailActivity.DetailSelectionListe
     class DetailViewHolder(private val binding: CellDetailBinding) : RecyclerView.ViewHolder(binding.root) {
         private val viewModel = SingleDogViewModel()
 
-        fun bindItems(singleDog: SingleDog) {
+        fun bindItems(singleDog: SingleDog, favoriteList: MutableSet<String>?) {
             viewModel.bind(singleDog)
             binding.viewModel = viewModel
+            favoriteList?.forEach {
+                if(it == singleDog.imageUrl) {
+                    binding.isFavourite.setImageDrawable(Initialization.contextComponent.inject().getDrawable(R.drawable.favourite))
+                }
+            }
         }
     }
 }

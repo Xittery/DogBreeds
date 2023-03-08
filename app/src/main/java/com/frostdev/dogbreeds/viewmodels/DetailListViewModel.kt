@@ -6,8 +6,6 @@ import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.Drawable
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
-import com.frostdev.dogbreeds.activities.DetailActivity
-import com.frostdev.dogbreeds.adapters.DetailAdapter
 import com.frostdev.dogbreeds.interfaces.DogService
 import com.frostdev.dogbreeds.model.AllImagesResponse
 import com.frostdev.dogbreeds.model.SingleDog
@@ -28,7 +26,7 @@ class DetailListViewModel(breed: String, subBreeds: List<String>?): BaseViewMode
     private var mBreed: String = breed
     private var msubBreedList: List<String>? = subBreeds
 
-    init{
+    init {
         loadImages()
     }
 
@@ -45,15 +43,22 @@ class DetailListViewModel(breed: String, subBreeds: List<String>?): BaseViewMode
     private fun collectDogs(imageResponse: AllImagesResponse?): MutableList<SingleDog> {
         val allDogsLists = mutableListOf<SingleDog>()
         imageResponse?.message?.forEach {
-            allDogsLists.add(SingleDog(mBreed, msubBreedList, drawableFromUrl(it)))
+            allDogsLists.add(SingleDog(mBreed, msubBreedList, drawableFromUrl(it), it))
         }
         return allDogsLists
     }
 
     @Throws(IOException::class)
-    fun drawableFromUrl(url: String?): Drawable {
+    fun drawableFromUrl(url: String?): Drawable? {
         val connection: HttpURLConnection = URL(url).openConnection() as HttpURLConnection
         connection.connect()
-        return BitmapDrawable(Resources.getSystem(), BitmapFactory.decodeStream(connection.inputStream))
+        return if(connection.responseCode != 404) {
+            BitmapDrawable(
+                Resources.getSystem(),
+                BitmapFactory.decodeStream(connection.inputStream)
+            )
+        } else {
+            null
+        }
     }
 }

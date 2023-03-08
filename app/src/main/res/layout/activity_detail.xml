@@ -9,28 +9,36 @@
             name="activity"
             type="com.frostdev.dogbreeds.activities.DetailActivity" />
     </data>
-    <androidx.appcompat.widget.LinearLayoutCompat
+    <RelativeLayout
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical"
         tools:context=".activities.DetailActivity">
 
-        <TextView
-            android:id="@+id/detail_title"
-            android:gravity="center"
-            android:textSize="20sp"
-            android:layout_margin="5dp"
-            android:textColor="@color/colorAccent"
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar_detail"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
+            android:layout_height="wrap_content"
+            android:background="?attr/colorPrimaryDark"
+            android:minHeight="?attr/actionBarSize"
+            android:theme="?attr/actionBarTheme"
+            app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+            app:theme="@style/ThemeOverlay.AppCompat.Dark"
+            android:elevation="10dp">
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/detail_recycler"
-            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-            app:adapter="@{activity.detailAdapter}"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"/>
+            <TextView
+                android:id="@+id/detail_title"
+                android:gravity="center"
+                android:textSize="20sp"
+                android:layout_margin="5dp"
+                android:textStyle="bold"
+                android:layout_alignParentTop="true"
+                android:textColor="@color/colorAccent"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+
+
+        </androidx.appcompat.widget.Toolbar>
 
         <ProgressBar
             android:id="@+id/progress_loader_detail"
@@ -40,5 +48,12 @@
             android:layout_centerInParent="true"
             android:visibility="visible" />
 
-    </androidx.appcompat.widget.LinearLayoutCompat>
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/detail_recycler"
+            android:layout_below="@id/toolbar_detail"
+            app:adapter="@{activity.detailAdapter}"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
+
+    </RelativeLayout>
 </layout>

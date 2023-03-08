@@ -1,41 +1,56 @@
 package com.frostdev.dogbreeds.viewmodels
 
+import android.content.res.Resources
+import android.graphics.BitmapFactory
+import android.graphics.drawable.BitmapDrawable
+import android.graphics.drawable.Drawable
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
-import com.frostdev.dogbreeds.helpers.PersistentSettings
-import com.frostdev.dogbreeds.injection.module.DataModule
-import com.frostdev.dogbreeds.model.SingleDog
+import com.frostdev.dogbreeds.helpers.PersistentDogs
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import java.io.IOException
+import java.net.HttpURLConnection
+import java.net.URL
 import javax.inject.Inject
 
 class FavoriteDogsListViewModel: BaseViewModel() {
 
-    var allDogsList: MutableLiveData<MutableList<SingleDog>> = MutableLiveData()
+    @Inject
+    lateinit var mPersistentDogs: PersistentDogs
 
-    init{
-        loadFavoriteDogs()
-    }
+    var favDogsList: MutableLiveData<MutableList<String>> = MutableLiveData()
 
-    private fun loadFavoriteDogs() {
-        /*viewModelScope.launch {
-            var dogs: MutableList<SingleDog> = mutableListOf()
+    fun loadFavourites() {
+        viewModelScope.launch {
+            var dogs: MutableList<String>
             withContext(Dispatchers.IO) {
-                val persistentFavorites = mPersistentSettings.com.getSettingStringSet(DataModule.ACTIVE_FAVORITES, null)
-                if(!persistentFavorites.isNullOrEmpty()) {
-                    dogs = collectDogs(mPersistentSettings.getSettingStringSet(DataModule.ACTIVE_FAVORITES, null)!!)
-                }
+                dogs = collectDogs(mPersistentDogs.getFavouriteDogsSet())
             }
-            allDogsList.postValue(dogs)
-        }*/
+            favDogsList.postValue(dogs)
+        }
     }
 
-    private fun collectDogs(dogFavs: Set<String>): MutableList<SingleDog> {
-        val allDogsLists = mutableListOf<SingleDog>()
-      /*  dogFavs?.message?.forEach {
-            allDogsLists.add(SingleDog(it.key, it.value, dogApi.getRandomImageFromBreed(it.key).execute().body()?.message))
-        }*/
+    private fun collectDogs(dogResponse: MutableSet<String>?): MutableList<String> {
+        val allDogsLists = mutableListOf<String>()
+        dogResponse?.forEach {
+            allDogsLists.add(it)
+        }
         return allDogsLists
+    }
+
+    @Throws(IOException::class)
+    fun drawableFromUrl(url: String?): Drawable? {
+        val connection: HttpURLConnection = URL(url).openConnection() as HttpURLConnection
+        connection.connect()
+        return if(connection.responseCode != 404) {
+            BitmapDrawable(
+                Resources.getSystem(),
+                BitmapFactory.decodeStream(connection.inputStream)
+            )
+        } else {
+            null
+        }
     }
 }

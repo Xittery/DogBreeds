@@ -1,17 +1,16 @@
 package com.frostdev.dogbreeds.injection.module
 
-import android.content.Context
-import com.frostdev.dogbreeds.helpers.PersistentSettings
+import com.frostdev.dogbreeds.helpers.PersistentDogs
+import com.frostdev.dogbreeds.injection.Initialization
 import dagger.Module
 import dagger.Provides
 
 @Module
-object DataModule {
-
-    val ACTIVE_FAVORITES = "activeFavorites"
+class DataModule() {
 
     @Provides
-    fun providePersistentSettings(context: Context): PersistentSettings {
-        return PersistentSettings(context)
+    fun providePersistentDogs(): PersistentDogs {
+        return PersistentDogs(Initialization.contextComponent.inject())
     }
+
 }

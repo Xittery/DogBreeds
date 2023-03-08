@@ -23,6 +23,7 @@
                 android:layout_width="75dp"
                 android:layout_height="75dp"
                 android:fitsSystemWindows="true"
+                android:scaleType="fitXY"
                 android:layout_alignParentEnd="true"
                 android:layout_centerVertical="true"
                 android:src="@{viewModel.getImage()}" />
