@@ -38,9 +38,7 @@ class DetailAdapter() : RecyclerView.Adapter<DetailAdapter.DetailViewHolder>() {
         val binding: CellDetailBinding = DataBindingUtil.inflate(LayoutInflater.from(parent.context), R.layout.cell_detail, parent, false)
         return DetailViewHolder(binding).listen { position, _ ->
             mPersistentDogs.addToFavouriteDogsSet(detailDogList[position].imageUrl)
-            //https://images.dog.ceo/breeds/akita/Japaneseakita.jpg
             favDogList = mPersistentDogs.getFavouriteDogsSet()
-            println(favDogList)
             notifyItemChanged(position)
         }
     }

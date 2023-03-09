@@ -32,6 +32,13 @@ class DetailActivity : AppCompatActivity() {
         binding = DataBindingUtil.setContentView(this, R.layout.activity_detail)
         setBreed()
         setBindings()
+        setCloser()
+    }
+
+    private fun setCloser() {
+        close_detail.setOnClickListener {
+            finish()
+        }
     }
 
     private fun setBindings() {

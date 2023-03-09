@@ -1,5 +1,6 @@
 package com.frostdev.dogbreeds.interfaces
 
+import android.graphics.drawable.Drawable
 import com.frostdev.dogbreeds.model.AllImagesResponse
 import com.frostdev.dogbreeds.model.DogResponse
 import com.frostdev.dogbreeds.model.ImageRandomDogResponse
@@ -21,8 +22,4 @@ interface DogService {
 
     @GET("https://dog.ceo/api/breed/{breed}/images")
     fun getAllImagesFromBreed(@Path("breed") breed: String) : Call<AllImagesResponse>
-
-    @GET
-    fun getSpecificImage(@Url url: String): Call<ImageRandomDogResponse>
-
 }

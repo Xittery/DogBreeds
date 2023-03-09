@@ -1,6 +1,9 @@
 package com.frostdev.dogbreeds.adapters
 
 import android.annotation.SuppressLint
+import android.content.res.Resources
+import android.graphics.BitmapFactory
+import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.Drawable
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -20,6 +23,9 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import java.io.IOException
+import java.net.HttpURLConnection
+import java.net.URL
 import javax.inject.Inject
 
 class FavoriteDogsAdapter() : RecyclerView.Adapter<FavoriteDogsAdapter.SingleDogViewHolder>() {
@@ -60,8 +66,7 @@ class FavoriteDogsAdapter() : RecyclerView.Adapter<FavoriteDogsAdapter.SingleDog
     }
 
     override fun onBindViewHolder(holder: SingleDogViewHolder, position: Int) {
-        println("")
-        //holder.bindItems()
+        holder.bindItems(singleDogImageList[position])
     }
 
     override fun getItemId(p0: Int): Long {
@@ -81,19 +86,29 @@ class FavoriteDogsAdapter() : RecyclerView.Adapter<FavoriteDogsAdapter.SingleDog
 
     @SuppressLint("NotifyDataSetChanged")
     fun updateSingleDogList(list: List<String>){
-        this.singleDogList = list
-        this.singleDogList.forEach {
-            MainScope().launch {
-                withContext(Dispatchers.IO) {
-                    var x = dogApi.getSpecificImage(it).execute().body()
-                    println(x)
+        MainScope().launch {
+            singleDogList = list
+            withContext(Dispatchers.IO) {
+                singleDogList.forEach {
+                    drawableFromUrl(it)?.let { it1 -> singleDogImageList.add(it1) }
                 }
             }
-            println("")
-            //this.singleDogImageList.add()
+            notifyDataSetChanged()
         }
+    }
 
-        notifyDataSetChanged()
+    @Throws(IOException::class)
+    fun drawableFromUrl(url: String?): Drawable? {
+        val connection: HttpURLConnection = URL(url).openConnection() as HttpURLConnection
+        connection.connect()
+        return if(connection.responseCode != 404) {
+            BitmapDrawable(
+                Resources.getSystem(),
+                BitmapFactory.decodeStream(connection.inputStream)
+            )
+        } else {
+            null
+        }
     }
 
     class SingleDogViewHolder(private val binding: CellFavouriteBinding) : RecyclerView.ViewHolder(binding.root) {
