@@ -1,5 +1,6 @@
 package com.frostdev.dogbreeds.fragments
 
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -9,6 +10,7 @@ import android.widget.TextView
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
+import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.frostdev.dogbreeds.R
 import com.frostdev.dogbreeds.activities.DetailActivity
 import com.frostdev.dogbreeds.adapters.AllDogsAdapter
@@ -34,7 +36,8 @@ class FavouriteDogsFragment : Fragment() {
         binding.fragment = this
         favDogsViewModel = FavoriteDogsListViewModel()
         binding.viewModel = favDogsViewModel
-        favDogsViewModel.loadFavourites()
+        binding.favoritedogsRecycler.layoutManager = StaggeredGridLayoutManager(3, StaggeredGridLayoutManager.VERTICAL)
+        reloadFavouriteDogs()
         favDogsAdapter = FavoriteDogsAdapter()
         return binding.root
     }
@@ -44,10 +47,24 @@ class FavouriteDogsFragment : Fragment() {
         favDogsViewModel.favDogsList.observe(viewLifecycleOwner, Observer { dogs ->
             if(dogs.isNotEmpty()) {
                 nofavs.visibility = View.GONE
+            } else {
+                nofavs.visibility = View.VISIBLE
             }
             favDogsAdapter.updateSingleDogList(dogs)
             fav_progress_loader.visibility = View.GONE
         })
+
+        favDogsAdapter.singleDogList.observe(viewLifecycleOwner, Observer { dogs ->
+            if(dogs.isNotEmpty()) {
+                nofavs.visibility = View.GONE
+            } else {
+                nofavs.visibility = View.VISIBLE
+            }
+        })
+    }
+
+    fun reloadFavouriteDogs() {
+        favDogsViewModel.loadFavourites()
     }
 
     fun getRecyclerAdapter(): FavoriteDogsAdapter {

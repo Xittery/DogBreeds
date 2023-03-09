@@ -8,11 +8,14 @@ import android.graphics.drawable.Drawable
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
+import androidx.lifecycle.MutableLiveData
 import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.RecyclerView
 import com.frostdev.dogbreeds.R
 import com.frostdev.dogbreeds.databinding.CellFavouriteBinding
+import com.frostdev.dogbreeds.helpers.GetDrawable
 import com.frostdev.dogbreeds.helpers.PersistentDogs
+import com.frostdev.dogbreeds.injection.Initialization
 import com.frostdev.dogbreeds.injection.component.DaggerInjector
 import com.frostdev.dogbreeds.injection.component.Injector
 import com.frostdev.dogbreeds.injection.module.DataModule
@@ -36,26 +39,30 @@ class FavoriteDogsAdapter() : RecyclerView.Adapter<FavoriteDogsAdapter.SingleDog
     @Inject
     lateinit var dogApi: DogService
 
+    @Inject
+    lateinit var getDrawable: GetDrawable
+
     private val injector: Injector = DaggerInjector
         .builder()
         .dataModule(DataModule())
         .networkModule(NetworkModule())
         .build()
 
-    private lateinit var singleDogList: List<String>
-    private var singleDogImageList: MutableList<Drawable>
+    lateinit var singleDogList: MutableLiveData<MutableList<String>>
+    private var singleDogImageList: MutableList<Drawable> = mutableListOf()
     private lateinit var mRecycler: RecyclerView
 
     init {
         injector.inject(this)
-        singleDogImageList = mutableListOf()
+        singleDogList = MutableLiveData()
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SingleDogViewHolder {
         val binding: CellFavouriteBinding = DataBindingUtil.inflate(LayoutInflater.from(parent.context), R.layout.cell_favourite, parent, false)
         return SingleDogViewHolder(binding).listen { position, _ ->
-            mPersistentDogs.addToFavouriteDogsSet(singleDogList[position])
-            notifyItemChanged(position)
+            mPersistentDogs.removeFromFavouriteDogsSet(singleDogList.value!![position])
+            singleDogList.value!!.removeAt(position)
+            updateSingleDogList(singleDogList.value!!)
         }
     }
 
@@ -74,7 +81,7 @@ class FavoriteDogsAdapter() : RecyclerView.Adapter<FavoriteDogsAdapter.SingleDog
     }
 
     override fun getItemCount(): Int {
-        return if(::singleDogList.isInitialized) singleDogList.size else 0
+        return singleDogImageList.size
     }
 
     fun <T : RecyclerView.ViewHolder> T.listen(event: (position: Int, type: Int) -> Unit): T {
@@ -85,29 +92,16 @@ class FavoriteDogsAdapter() : RecyclerView.Adapter<FavoriteDogsAdapter.SingleDog
     }
 
     @SuppressLint("NotifyDataSetChanged")
-    fun updateSingleDogList(list: List<String>){
+    fun updateSingleDogList(list: MutableList<String>){
         MainScope().launch {
-            singleDogList = list
+            singleDogList.value = list
             withContext(Dispatchers.IO) {
-                singleDogList.forEach {
-                    drawableFromUrl(it)?.let { it1 -> singleDogImageList.add(it1) }
+                singleDogImageList.clear()
+                singleDogList.value!!.forEach {
+                    getDrawable.drawableFromUrl(it)?.let { it1 -> singleDogImageList.add(it1) }
                 }
             }
-            notifyDataSetChanged()
-        }
-    }
-
-    @Throws(IOException::class)
-    fun drawableFromUrl(url: String?): Drawable? {
-        val connection: HttpURLConnection = URL(url).openConnection() as HttpURLConnection
-        connection.connect()
-        return if(connection.responseCode != 404) {
-            BitmapDrawable(
-                Resources.getSystem(),
-                BitmapFactory.decodeStream(connection.inputStream)
-            )
-        } else {
-            null
+            this@FavoriteDogsAdapter.notifyDataSetChanged()
         }
     }
 
@@ -117,6 +111,7 @@ class FavoriteDogsAdapter() : RecyclerView.Adapter<FavoriteDogsAdapter.SingleDog
         fun bindItems(image: Drawable) {
             viewModel.bind(image)
             binding.viewModel = viewModel
+            binding.isFavourite.setImageDrawable(Initialization.contextComponent.inject().getDrawable(R.drawable.favourite))
         }
     }
 }

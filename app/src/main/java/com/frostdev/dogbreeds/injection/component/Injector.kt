@@ -1,6 +1,7 @@
 package com.frostdev.dogbreeds.injection.component
 
 import com.frostdev.dogbreeds.activities.DetailActivity
+import com.frostdev.dogbreeds.adapters.AllDogsAdapter
 import com.frostdev.dogbreeds.adapters.DetailAdapter
 import com.frostdev.dogbreeds.adapters.FavoriteDogsAdapter
 import com.frostdev.dogbreeds.injection.module.DataModule
@@ -23,6 +24,7 @@ interface Injector {
     fun inject(detailViewModel: DetailListViewModel)
     fun inject(detailAdapter: DetailAdapter)
     fun inject(favoriteDogsAdapter: FavoriteDogsAdapter)
+    fun inject(allDogsAdapter: AllDogsAdapter)
 
 
     @Component.Builder

@@ -21,10 +21,10 @@
             android:layout_height="wrap_content">
 
             <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/detail_image"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:scaleType="fitXY"
-                android:src="@{viewModel.getImage()}" />
+                android:scaleType="fitXY" />
 
             <androidx.appcompat.widget.AppCompatImageView
                 android:id="@+id/is_favourite"

@@ -9,14 +9,6 @@
         android:orientation="vertical"
         tools:context=".activities.MainActivity">
 
-        <androidx.appcompat.widget.AppCompatImageView
-            android:src="@drawable/sound_detection_dog_barking"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginBottom="5dp"
-            android:layout_marginTop="5dp"
-            android:layout_width="50dp"
-            android:layout_height="50dp"/>
-
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
@@ -28,15 +20,30 @@
             app:theme="@style/ThemeOverlay.AppCompat.Dark"
             android:elevation="10dp">
 
-            <com.google.android.material.tabs.TabLayout
-                android:id="@+id/tabLayout"
+            <androidx.appcompat.widget.LinearLayoutCompat
+                android:orientation="vertical"
                 android:layout_width="match_parent"
-                android:layout_height="30dp"
-                app:tabGravity="fill"
-                app:tabIndicatorColor="@null"
-                app:tabMode="fixed"
-                app:tabTextColor="@color/colorPurple"
-                app:tabSelectedTextColor="@color/colorAccent" />
+                android:layout_height="match_parent">
+
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:src="@drawable/sound_detection_dog_barking"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginBottom="5dp"
+                    android:layout_marginTop="5dp"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"/>
+
+                <com.google.android.material.tabs.TabLayout
+                    android:id="@+id/tabLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="30dp"
+                    app:tabGravity="fill"
+                    app:tabIndicatorColor="@null"
+                    app:tabMode="fixed"
+                    app:tabTextColor="@color/colorPurple"
+                    app:tabSelectedTextColor="@color/colorAccent" />
+
+            </androidx.appcompat.widget.LinearLayoutCompat>
         </androidx.appcompat.widget.Toolbar>
 
         <androidx.viewpager.widget.ViewPager

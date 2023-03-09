@@ -1,36 +1,21 @@
 package com.frostdev.dogbreeds.viewmodels
 
-import android.content.res.Resources
-import android.graphics.BitmapFactory
-import android.graphics.drawable.BitmapDrawable
-import android.graphics.drawable.Drawable
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.viewModelScope
 import com.frostdev.dogbreeds.model.SingleDog
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
-import java.io.IOException
-import java.net.HttpURLConnection
-import java.net.URL
 import java.util.*
 
 
 class SingleDogViewModel: BaseViewModel() {
 
     private val breed = MutableLiveData<String>()
-    private val image = MutableLiveData<Drawable?>()
+    private val image = MutableLiveData<String?>()
 
     fun bind(singleDog: SingleDog){
         breed.value = singleDog.breed.replaceFirstChar { if (it.isLowerCase()) it.titlecase(Locale.getDefault()) else it.toString() }
-        image.value = singleDog.image
+        image.value = singleDog.imageUrl
     }
 
     fun getBreed(): MutableLiveData<String> {
         return breed
-    }
-
-    fun getImage(): MutableLiveData<Drawable?> {
-        return image
     }
 }

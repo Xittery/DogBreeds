@@ -6,6 +6,7 @@ import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.frostdev.dogbreeds.R
 import com.frostdev.dogbreeds.databinding.CellDetailBinding
 import com.frostdev.dogbreeds.helpers.PersistentDogs
@@ -16,6 +17,7 @@ import com.frostdev.dogbreeds.injection.module.DataModule
 import com.frostdev.dogbreeds.model.SingleDog
 import com.frostdev.dogbreeds.viewmodels.SingleDogViewModel
 import javax.inject.Inject
+import kotlin.math.sin
 
 class DetailAdapter() : RecyclerView.Adapter<DetailAdapter.DetailViewHolder>() {
 
@@ -37,7 +39,11 @@ class DetailAdapter() : RecyclerView.Adapter<DetailAdapter.DetailViewHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): DetailViewHolder {
         val binding: CellDetailBinding = DataBindingUtil.inflate(LayoutInflater.from(parent.context), R.layout.cell_detail, parent, false)
         return DetailViewHolder(binding).listen { position, _ ->
-            mPersistentDogs.addToFavouriteDogsSet(detailDogList[position].imageUrl)
+            if(mPersistentDogs.addOrRemoveToFavouriteDogsSet(detailDogList[position].imageUrl)) {
+                binding.isFavourite.setImageDrawable(Initialization.contextComponent.inject().getDrawable(R.drawable.favourite))
+            } else {
+                binding.isFavourite.setImageDrawable(Initialization.contextComponent.inject().getDrawable(R.drawable.notfavourite))
+            }
             favDogList = mPersistentDogs.getFavouriteDogsSet()
             notifyItemChanged(position)
         }
@@ -79,6 +85,7 @@ class DetailAdapter() : RecyclerView.Adapter<DetailAdapter.DetailViewHolder>() {
         fun bindItems(singleDog: SingleDog, favoriteList: MutableSet<String>?) {
             viewModel.bind(singleDog)
             binding.viewModel = viewModel
+            Glide.with(itemView.context).load(singleDog.imageUrl).into(binding.detailImage)
             favoriteList?.forEach {
                 if(it == singleDog.imageUrl) {
                     binding.isFavourite.setImageDrawable(Initialization.contextComponent.inject().getDrawable(R.drawable.favourite))

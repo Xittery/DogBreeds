@@ -26,6 +26,12 @@
                 android:scaleType="fitXY"
                 android:src="@{viewModel.getImage()}" />
 
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/is_favourite"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:src="@drawable/notfavourite" />
+
         </RelativeLayout>
 
     </androidx.cardview.widget.CardView>

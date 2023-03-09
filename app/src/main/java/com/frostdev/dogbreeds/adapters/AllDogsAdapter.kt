@@ -5,9 +5,11 @@ import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.frostdev.dogbreeds.R
 import com.frostdev.dogbreeds.databinding.CellSingleDogBinding
 import com.frostdev.dogbreeds.fragments.AllDogsFragment
+import com.frostdev.dogbreeds.injection.Initialization
 import com.frostdev.dogbreeds.model.SingleDog
 import com.frostdev.dogbreeds.viewmodels.SingleDogViewModel
 import java.util.ArrayList
@@ -58,6 +60,7 @@ class AllDogsAdapter(breedSelectionListener: AllDogsFragment.BreedSelectionListe
 
         fun bindItems(dog: SingleDog) {
             viewModel.bind(dog)
+            Glide.with(itemView.context).load(dog.imageUrl).into(binding.singleDogImage)
             binding.viewModel = viewModel
         }
     }

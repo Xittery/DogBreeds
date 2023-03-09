@@ -22,10 +22,23 @@ class PersistentDogs constructor(context: Context) {
         return favDogs.getStringSet("dogs", null)
     }
 
-    fun addToFavouriteDogsSet(dog: String) {
+    fun addOrRemoveToFavouriteDogsSet(dog: String): Boolean {
         val dogs = getFavouriteDogsSet() ?: mutableSetOf()
-        if (!dogs.contains(dog)) {
+        return if (dogs.contains(dog)) {
+            dogs.remove(dog)
+            favDogs.edit().putStringSet("dogs", dogs).apply()
+            true
+        } else {
             dogs.add(dog)
+            favDogs.edit().putStringSet("dogs", dogs).apply()
+            false
+        }
+    }
+
+    fun removeFromFavouriteDogsSet(dog: String) {
+        val dogs = getFavouriteDogsSet() ?: mutableSetOf()
+        if (dogs.contains(dog)) {
+            dogs.remove(dog)
             favDogs.edit().putStringSet("dogs", dogs).apply()
         }
     }

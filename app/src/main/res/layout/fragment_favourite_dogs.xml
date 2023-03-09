@@ -28,7 +28,6 @@
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/favoritedogs_recycler"
-            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             android:adapter="@{fragment.getRecyclerAdapter()}"
             android:layout_width="match_parent"
             android:layout_height="match_parent"/>

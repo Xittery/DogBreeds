@@ -14,12 +14,12 @@ import retrofit2.http.Url
 
 interface DogService {
 
-    @GET("https://dog.ceo/api/breeds/list/all")
+    @GET("breeds/list/all")
     fun getDogs() : Call<DogResponse>
 
-    @GET("https://dog.ceo/api/breed/{breed}/images/random")
+    @GET("breed/{breed}/images/random")
     fun getRandomImageFromBreed(@Path("breed") breed: String) : Call<ImageRandomDogResponse>
 
-    @GET("https://dog.ceo/api/breed/{breed}/images")
+    @GET("breed/{breed}/images")
     fun getAllImagesFromBreed(@Path("breed") breed: String) : Call<AllImagesResponse>
 }
