@@ -13,6 +13,8 @@ import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.RecyclerView
 import com.frostdev.dogbreeds.R
 import com.frostdev.dogbreeds.databinding.CellFavouriteBinding
+import com.frostdev.dogbreeds.fragments.AllDogsFragment
+import com.frostdev.dogbreeds.fragments.FavouriteDogsFragment
 import com.frostdev.dogbreeds.helpers.GetDrawable
 import com.frostdev.dogbreeds.helpers.PersistentDogs
 import com.frostdev.dogbreeds.injection.Initialization
@@ -48,7 +50,7 @@ class FavoriteDogsAdapter() : RecyclerView.Adapter<FavoriteDogsAdapter.SingleDog
         .networkModule(NetworkModule())
         .build()
 
-    lateinit var singleDogList: MutableLiveData<MutableList<String>>
+    var singleDogList: MutableLiveData<MutableList<String>>
     private var singleDogImageList: MutableList<Drawable> = mutableListOf()
     private lateinit var mRecycler: RecyclerView
 
@@ -60,9 +62,10 @@ class FavoriteDogsAdapter() : RecyclerView.Adapter<FavoriteDogsAdapter.SingleDog
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SingleDogViewHolder {
         val binding: CellFavouriteBinding = DataBindingUtil.inflate(LayoutInflater.from(parent.context), R.layout.cell_favourite, parent, false)
         return SingleDogViewHolder(binding).listen { position, _ ->
-            mPersistentDogs.removeFromFavouriteDogsSet(singleDogList.value!![position])
+            mPersistentDogs.addOrRemoveToFavouriteDogsSet(singleDogList.value!![position])
             singleDogList.value!!.removeAt(position)
-            updateSingleDogList(singleDogList.value!!)
+            singleDogImageList.removeAt(position)
+            notifyItemRemoved(position)
         }
     }
 
